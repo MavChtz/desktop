@@ -119,7 +119,7 @@ signals:
     void activityJobStatusCode(int statusCode);
     void sendNotificationRequest(const QString &accountName, const QString &link, const QByteArray &verb, int row);
     void messageSent();
-
+    void displayTalkReplyOptions(const int activityIndex);
 
 protected:
     void setup();
