@@ -43,6 +43,7 @@ class ActivityListModel : public QAbstractListModel
     Q_PROPERTY(quint32 maxActionButtons READ maxActionButtons CONSTANT)
 
     Q_PROPERTY(AccountState *accountState READ accountState CONSTANT)
+
 public:
     enum DataRole {
         ActionIconRole = Qt::UserRole + 1,
@@ -69,6 +70,7 @@ public:
         ThumbnailRole,
         TalkNotificationConversationTokenRole,
         TalkNotificationMessageIdRole,
+        TalkNotificationMessageSentRole,
     };
     Q_ENUM(DataRole)
 
@@ -103,6 +105,9 @@ public:
 
     void setCurrentItem(const int currentItem);
 
+    void replyMessageSent(const int activityIndex, const QString &message);
+    Q_INVOKABLE QString talkReplyMessageSent(const int activityIndex) const;
+
 public slots:
     void slotRefreshActivity();
     void slotRemoveAccount();
@@ -113,6 +118,8 @@ public slots:
 signals:
     void activityJobStatusCode(int statusCode);
     void sendNotificationRequest(const QString &accountName, const QString &link, const QByteArray &verb, int row);
+    void messageSent();
+
 
 protected:
     void setup();

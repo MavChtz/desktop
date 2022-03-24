@@ -78,6 +78,7 @@ QHash<int, QByteArray> ActivityListModel::roleNames() const
     roles[ThumbnailRole] = "thumbnail";
     roles[TalkNotificationConversationTokenRole] = "conversationToken";
     roles[TalkNotificationMessageIdRole] = "messageId";
+    roles[TalkNotificationMessageSentRole] = "messageSent";
 
     return roles;
 }
@@ -325,6 +326,8 @@ QVariant ActivityListModel::data(const QModelIndex &index, int role) const
         return a._talkNotificationData.conversationToken;
     case TalkNotificationMessageIdRole:
         return a._talkNotificationData.messageId;
+    case TalkNotificationMessageSentRole:
+        return a._talkNotificationData.messageSent;
     default:
         return QVariant();
     }
@@ -817,6 +820,29 @@ void ActivityListModel::slotRemoveAccount()
     _totalActivitiesFetched = 0;
     _showMoreActivitiesAvailableEntry = false;
 }
+
+void ActivityListModel::replyMessageSent(const int activityIndex, const QString &message)
+{
+    if (activityIndex < 0 || activityIndex >= _finalList.size()) {
+        qCWarning(lcActivity) << "Couldn't trigger action on activity at index" << activityIndex << "/ final list size:" << _finalList.size();
+        return;
+    }
+
+    _finalList[activityIndex]._talkNotificationData.messageSent = message;
+
+    emit messageSent();
+}
+
+QString ActivityListModel::talkReplyMessageSent(const int activityIndex) const
+{
+    if (activityIndex < 0 || activityIndex >= _finalList.size()) {
+        qCWarning(lcActivity) << "Couldn't trigger action on activity at index" << activityIndex << "/ final list size:" << _finalList.size();
+        return {};
+    }
+
+    return _finalList[activityIndex]._talkNotificationData.messageSent;
+}
+
 
 }
 
